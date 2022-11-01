@@ -167,7 +167,14 @@ export class RobotPart extends gfx.Transform3
 
     createChain(chain: IK.Chain3D): void
     {
-
+        if(this.name == 'upperArm')
+        {
+            // Create a bone to start the chain
+        }
+        else if(this.name != 'root')
+        {
+            // Add on a bone onto the existing chain
+        }
 
         // Recursively call this function for each child robot part
         this.children.forEach((child: gfx.Transform3)=>{
