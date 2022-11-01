@@ -10,6 +10,7 @@ import { Robot } from './Robot';
 export class RobotApp extends gfx.GfxApp
 {
     private cameraControls: gfx.OrbitControls;
+    private target: gfx.TransformWidget;
     private robot: Robot;
 
     constructor()
@@ -17,6 +18,7 @@ export class RobotApp extends gfx.GfxApp
         super();
 
         this.cameraControls = new gfx.OrbitControls(this.camera);
+        this.target = new gfx.TransformWidget(0.2, 0.01, 0.025);
         this.robot = new Robot();
     }
 
@@ -59,12 +61,27 @@ export class RobotApp extends gfx.GfxApp
         // Add the robot to the scene
         this.robot.createMeshes();
         this.scene.add(this.robot);
+
+        // Add the target widget to the scene
+        this.target.position.set(0.5, 0.6, -0.5);
+        this.scene.add(this.target);
     }
 
     update(deltaTime: number): void 
     {
-        // Update the camera orbit controls
-        this.cameraControls.update(deltaTime);
+        // Update the transform widget
+        this.target.update(deltaTime);
+
+        // Update the camera orbit controls only if the target is not being moved
+        if(this.target.isSelected())
+        {
+            this.cameraControls.freeze();
+        }
+        else
+        {
+            // Update the camera orbit controls
+            this.cameraControls.update(deltaTime);
+        }
 
         // Update the robot animation
         this.robot.update(deltaTime);
