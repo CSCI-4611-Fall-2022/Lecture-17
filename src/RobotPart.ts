@@ -5,6 +5,7 @@
  */ 
 
 import * as gfx from 'gophergfx'
+import * as IK from 'ikts'
 
 export class RobotPart extends gfx.Transform3
 {
@@ -162,5 +163,18 @@ export class RobotPart extends gfx.Transform3
                 }
             });
         }
+    }
+
+    createChain(chain: IK.Chain3D): void
+    {
+
+
+        // Recursively call this function for each child robot part
+        this.children.forEach((child: gfx.Transform3)=>{
+            if(child instanceof RobotPart)
+            {
+                child.createChain(chain);
+            }
+        });
     }
 }
