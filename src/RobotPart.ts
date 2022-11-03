@@ -186,6 +186,9 @@ export class RobotPart extends gfx.Transform3
         else if(this.name != 'root')
         {
             // Add on a bone onto the existing chain
+            chain.addConsecutiveBone(new IK.V3(0, 1, 0), this.boneLength);
+
+            this.boneId = chain.bones.length - 1;
         }
 
         // Recursively call this function for each child robot part
