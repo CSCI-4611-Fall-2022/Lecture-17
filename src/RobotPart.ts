@@ -202,7 +202,34 @@ export class RobotPart extends gfx.Transform3
 
     update(chain: IK.Chain3D): void
     {
-        // do the update
+        if(this.boneId >= 0)
+        {
+            // Get the corresponding bone in the IK chain
+            const bone = chain.bones[this.boneId];
+
+            // Compute the direction of the bone in world space
+            const boneDirection = new gfx.Vector3(
+                bone.end.x - bone.start.x,
+                bone.end.y - bone.start.y,
+                bone.end.z - bone.start.z
+            );
+
+            // Reset the robot part rotation
+            this.rotation.setIdentity();
+
+            // Get the robot part's position, rotation, and scale in world space
+            this.updateWorldMatrix();
+            const [worldPosition, worldRotation, worldScale] = this.worldMatrix.decompose();
+        
+            // Rotate the bone direction so that it is in local space
+            boneDirection.rotate(worldRotation.inverse());
+
+            // Set the rotation so that -Z points in the directon of the bone in local space 
+            this.rotation.lookAt(gfx.Vector3.ZERO, boneDirection);
+
+            // Correct for the fact that the bone is extending in the Y direction
+            this.rotateX(-Math.PI / 2);
+        }
 
         // Recursively call this function for each child robot part
         this.children.forEach((child: gfx.Transform3)=>{
