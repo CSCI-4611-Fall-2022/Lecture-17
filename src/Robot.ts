@@ -40,8 +40,15 @@ export class Robot extends gfx.Transform3
         this.root.setPose(name, pose);
     }
 
-    update(deltaTime: number): void
+    update(target: gfx.Vector3): void
     {
-        // to be added
+        // Set the target position for the ik solver
+        this.ikSolver.targets[0].set(target.x, target.y, target.z);
+
+        // Use the ik solver to compute new poses for the robot
+        this.ikSolver.update();
+
+        // Recursively update all parts of the robot
+        this.root.update(this.ikChain);
     }
 }

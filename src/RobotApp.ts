@@ -84,6 +84,6 @@ export class RobotApp extends gfx.GfxApp
         }
 
         // Update the robot animation
-        this.robot.update(deltaTime);
+        this.robot.update(this.target.position);
     }
 }

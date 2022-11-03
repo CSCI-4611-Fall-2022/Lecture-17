@@ -199,4 +199,17 @@ export class RobotPart extends gfx.Transform3
             }
         });
     }
+
+    update(chain: IK.Chain3D): void
+    {
+        // do the update
+
+        // Recursively call this function for each child robot part
+        this.children.forEach((child: gfx.Transform3)=>{
+            if(child instanceof RobotPart)
+            {
+                child.update(chain);
+            }
+        });
+    }
 }
