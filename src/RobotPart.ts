@@ -12,11 +12,14 @@ export class RobotPart extends gfx.Transform3
     public name: string;
     public boneLength: number;
 
+    private boneId: number;
+
     constructor(name: string)
     {
         super();
 
         this.name = name;
+        this.boneId = -1;
 
         // Recursively create the robot skeleton
         if(this.name == 'root')
@@ -169,7 +172,16 @@ export class RobotPart extends gfx.Transform3
     {
         if(this.name == 'upperArm')
         {
-            // Create a bone to start the chain
+            const bone = new IK.Bone3D(
+                new IK.V3(this.position.x, this.position.y, this.position.z),
+                undefined,
+                new IK.V3(0, 1, 0),
+                this.boneLength
+            );
+
+            chain.addBone(bone);
+
+            this.boneId = 0;
         }
         else if(this.name != 'root')
         {
